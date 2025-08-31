@@ -14,6 +14,11 @@ export class AppController {
     return { message: "hello-world" };
   }
 
+  @Get('seed')
+  runSeed() {
+    return this.client.send('seed_database', 'hola'); 
+  }
+
   @Post('sum')
   getSum(@Body() nums) {
     return this.client.send({ cmd: 'get_sum' }, nums); 

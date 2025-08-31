@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MATH_SERVICE } from './config/services';
 import { envs } from './config/env';
+import { TeacherModule } from './teacher/teacher.module';
+import { StudentModule } from './student/student.module';
+import { StudyPlanModule } from './study-plan/study-plan.module';
 
 @Module({
   imports: [
@@ -17,6 +20,9 @@ import { envs } from './config/env';
         }
       },
     ]),
+    TeacherModule,
+    StudentModule,
+    StudyPlanModule,
   ],
   controllers: [AppController],
   providers: [AppService],
