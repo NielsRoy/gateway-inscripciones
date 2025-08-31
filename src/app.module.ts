@@ -7,6 +7,8 @@ import { envs } from './config/env';
 import { TeacherModule } from './teacher/teacher.module';
 import { StudentModule } from './student/student.module';
 import { StudyPlanModule } from './study-plan/study-plan.module';
+import { ScheduleModule } from './schedule/schedule.module';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { StudyPlanModule } from './study-plan/study-plan.module';
     TeacherModule,
     StudentModule,
     StudyPlanModule,
+    ScheduleModule,
+    RegistrationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
