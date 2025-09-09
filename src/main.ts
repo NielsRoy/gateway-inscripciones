@@ -21,7 +21,6 @@ async function bootstrap() {
     .setTitle('Sistema de inscripciones - API')
     .setDescription('Sistema de inscripciones - Endpoints')
     .setVersion('1.0')
-    //.addTag('cats')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   const apiDocPath = 'api';

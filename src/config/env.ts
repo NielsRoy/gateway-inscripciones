@@ -4,14 +4,14 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
-  MATH_MICROSERVICE_HOST: string;
-  MATH_MICROSERVICE_PORT: number;
+  KAFKA_HOST: string;
+  KAFKA_PORT: number;
 }
 
 const envsSchema = joi.object({
   PORT: joi.number().required(),
-  MATH_MICROSERVICE_HOST: joi.string().required(),
-  MATH_MICROSERVICE_PORT: joi.number().required(),
+  KAFKA_HOST: joi.string().required(),
+  KAFKA_PORT: joi.number().required(),
 
 })
 .unknown(true);
@@ -28,6 +28,6 @@ const envVars:EnvVars = value;
 
 export const envs = {
   port: envVars.PORT,
-  mathMicroserviceHost: envVars.MATH_MICROSERVICE_HOST,
-  mathMicroservicePort: envVars.MATH_MICROSERVICE_PORT,
+  kafkaHost: envVars.KAFKA_HOST,
+  kafkaPort: envVars.KAFKA_PORT,
 };

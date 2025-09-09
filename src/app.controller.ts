@@ -1,31 +1,23 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { MATH_SERVICE } from './config/services';
-import { ClientProxy } from '@nestjs/microservices';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { firstValueFrom } from 'rxjs';
 
 @Controller()
 export class AppController {
-  constructor(
-    @Inject(MATH_SERVICE)
-    private readonly client: ClientProxy,
-  ) {}
-
-  @Get('hello')
-  getHello() {
-    return { message: "hello-world" };
-  }
+  
+  constructor() {}
 
   @Get('seed')
   runSeed() {
-    return this.client.send('seed_database', 'hola'); 
+    //return this.client.send('seed_database', 'hola'); 
   }
 
   @Post('sum')
   getSum(@Body() nums) {
-    return this.client.send({ cmd: 'get_sum' }, nums); 
+    //return this.client.send({ cmd: 'get_sum' }, nums); 
   }
 
   @Get('study-plan/:code/subjects')
   getSubjects(@Param('code') code: string) {
-    return this.client.send({ cmd: 'get_study_plan_subjects' }, { code });
+    //return this.client.send({ cmd: 'get_study_plan_subjects' }, { code });
   }
 }
