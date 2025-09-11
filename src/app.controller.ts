@@ -1,19 +1,22 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import { CacheService } from './cache.service';
 
 @Controller()
 export class AppController {
   
-  constructor() {}
+  constructor(
+    private readonly cacheService: CacheService,
+  ) {}
 
-  @Get('seed')
-  runSeed() {
-    //return this.client.send('seed_database', 'hola'); 
-  }
+  // @Get('seed')
+  // runSeed() {
+  //   //return this.client.send('seed_database', 'hola'); 
+  // }
 
-  @Post('sum')
-  getSum(@Body() nums) {
-    //return this.client.send({ cmd: 'get_sum' }, nums); 
+  @Post('reply')
+  handleReply(@Body() body) {
+    this.cacheService.handleReply(body);
   }
 
   @Get('study-plan/:code/subjects')

@@ -12,6 +12,8 @@ export interface KafkaPayload {
   method: HttpMethod;
   entity: any;
   body?: any;
+  hash: string;
+  replyTo: string;
 }
 
 @Injectable()
@@ -26,7 +28,7 @@ export class KafkaService implements OnModuleInit {
     //await this.kafkaClient.connect();
   }
 
-  send(payload: KafkaPayload) {
-    return this.kafkaClient.send<string, KafkaPayload>(KAFKA_TOPIC, payload);
+  emit(payload: KafkaPayload) {
+    return this.kafkaClient.emit<string, KafkaPayload>(KAFKA_TOPIC, payload);
   }
 }

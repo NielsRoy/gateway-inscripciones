@@ -34,7 +34,7 @@ export class CreateRegistrationDto {
   @ApiProperty({
     description: 'Codigo del estudiante',
     nullable: false,
-    example: 220012551,
+    example: 219012441,
   })
   @IsNumber()
   @IsPositive()

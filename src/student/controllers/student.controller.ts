@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req } from '@nestjs/common';
 import { StudentService } from '../student.service';
 import { CreateStudentDto } from '../dto/create-student.dto';
 import { UpdateStudentDto } from '../dto/update-student.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { HttpMethod, KafkaService } from 'src/kafka.service';
+import type { Request } from 'express';
 
 @ApiTags('Estudiante')
 @Controller('student')
@@ -13,19 +14,27 @@ export class StudentController {
   ) {}
 
   @Post()
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.kafkaService.send({
+  create(@Body() createStudentDto: CreateStudentDto, @Req() req: Request) {
+    const hash = (req as any).hash;
+
+    return this.kafkaService.emit({
       method: HttpMethod.POST,
       entity: 'Student',
       body: createStudentDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
     });
   }
 
   @Get()
-  findAll() {
-    return this.kafkaService.send({
+  findAll(@Req() req: Request) {
+    const hash = (req as any).hash;
+
+    return this.kafkaService.emit({
       method: HttpMethod.GET,
       entity: 'Student',
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
     });
   }
 
@@ -35,11 +44,15 @@ export class StudentController {
   }
 
   @Patch(':code')
-  update(@Param('code', ParseIntPipe) code: number, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.kafkaService.send({
+  update(@Param('code', ParseIntPipe) code: number, @Body() updateStudentDto: UpdateStudentDto, @Req() req: Request) {
+    const hash = (req as any).hash;
+
+    return this.kafkaService.emit({
       method: HttpMethod.PATCH,
       entity: 'Student',
-      body: { code, ...updateStudentDto }
+      body: { code, ...updateStudentDto },
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
     })
   }
 

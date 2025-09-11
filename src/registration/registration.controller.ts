@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
 import { UpdateRegistrationDto } from './dto/update-registration.dto';
 import { ApiTags } from '@nestjs/swagger';
+import type { Request } from 'express';
 
 @ApiTags('Inscripción')
 @Controller('registration')
@@ -10,7 +11,7 @@ export class RegistrationController {
   constructor(private readonly registrationService: RegistrationService) {}
 
   @Post()
-  create(@Body() createRegistrationDto: CreateRegistrationDto) {
+  create(@Body() createRegistrationDto: CreateRegistrationDto, @Req() req: Request) {
     return this.registrationService.create(createRegistrationDto);
   }
 
