@@ -21,10 +21,11 @@ export class PlanSubjectController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { subjectId, studyPlanId, ...rest } = createPlanSubjectDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'PlanSubject',
-      body: createPlanSubjectDto,
+      body: { ...rest, subject: { id: subjectId }, studyPlan: { id: studyPlanId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class PlanSubjectController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { subjectId, studyPlanId, ...rest } = updatePlanSubjectDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'PlanSubject',
-      body: { id, ...updatePlanSubjectDto },
+      body: { id, ...rest, subject: { id: subjectId }, studyPlan: { id: studyPlanId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

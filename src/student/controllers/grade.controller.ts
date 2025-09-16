@@ -21,10 +21,11 @@ export class GradeController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { registrationDetailId, studentId, ...rest } = createGradeDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'Grade',
-      body: createGradeDto,
+      body: { ...rest, registrationDetail: { id: registrationDetailId }, student: { id: studentId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class GradeController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { registrationDetailId, studentId, ...rest } = updateGradeDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'Grade',
-      body: { id, ...updateGradeDto },
+      body: { id, ...rest, registrationDetail: { id: registrationDetailId }, student: { id: studentId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

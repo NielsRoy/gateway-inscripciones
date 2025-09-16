@@ -4,13 +4,13 @@ import { IsNumber, IsPositive } from "class-validator";
 export class CreatePeriodDto {
 
   @ApiProperty({
-    description: 'Año',
+    description: 'ID de la gestión',
     nullable: false,
-    example: 2027,
+    example: 1,
   })
   @IsNumber()
   @IsPositive()
-  yearNumber: number;
+  termId: number;
 
   @ApiProperty({
     description: 'Periodo',

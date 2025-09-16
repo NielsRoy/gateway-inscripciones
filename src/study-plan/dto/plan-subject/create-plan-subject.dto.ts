@@ -24,13 +24,13 @@ export class CreatePlanSubjectDto {
   isOptional: boolean;
 
   @ApiProperty({
-    description: 'Codigo de la materia',
+    description: 'ID de la materia',
     nullable: false,
     example: 4,
   })
-  @IsString()
-  @IsNotEmpty()
-  subjectCode: string;
+  @IsNumber()
+  @IsPositive()
+  subjectId: string;
 
   @ApiProperty({
     description: 'Nivel en el plan de estudio',
@@ -43,11 +43,11 @@ export class CreatePlanSubjectDto {
   levelNumber: number;
 
   @ApiProperty({
-    description: 'Codigo del plan de estudio',
+    description: 'ID del plan de estudio',
     nullable: false,
-    example: '187-3',
+    example: 1,
   })
-  @IsString()
-  @IsNotEmpty()
-  studyPlanCode: string;
+  @IsNumber()
+  @IsPositive()
+  studyPlanId: number;
 }

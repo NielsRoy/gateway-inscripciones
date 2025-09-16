@@ -21,10 +21,11 @@ export class RegistrationController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { studentId, periodId, ...rest } = createRegistrationDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'Registration',
-      body: createRegistrationDto,
+      body: { ...rest, student: { id: studentId }, period: { id: periodId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class RegistrationController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { studentId, periodId, ...rest } = updateRegistrationDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'Registration',
-      body: { id, ...updateRegistrationDto },
+      body: { id, ...rest, student: { id: studentId }, period: { id: periodId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

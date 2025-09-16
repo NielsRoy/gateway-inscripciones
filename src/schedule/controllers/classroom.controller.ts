@@ -21,10 +21,11 @@ export class ClassroomController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { buildingId, ...rest } = createClassroomDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'Classroom',
-      body: createClassroomDto,
+      body: { ...rest, building: { id: buildingId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class ClassroomController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { buildingId, ...rest } = updateClassroomDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'Classroom',
-      body: { id, ...updateClassroomDto },
+      body: { id, ...rest, building: { id: buildingId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

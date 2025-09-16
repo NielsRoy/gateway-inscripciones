@@ -13,22 +13,13 @@ export class CreateGroupScheduleDto {
   scheduleId: number;
 
   @ApiProperty({
-    description: 'Número del aula',
+    description: 'ID del aula',
     nullable: false,
-    example: 11,
+    example: 1,
   })
   @IsNumber()
   @IsPositive()
-  classroomNumber: number;
-
-  @ApiProperty({
-    description: 'Número del modulo',
-    nullable: false,
-    example: 225,
-  })
-  @IsNumber()
-  @IsPositive()
-  buildingNumber: number;
+  classroomId: number;
 
   @ApiProperty({
     description: 'ID del día de la semana',

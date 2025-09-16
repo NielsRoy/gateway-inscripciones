@@ -14,29 +14,29 @@ export class CreateGradeDto {
   number: number;
 
   @ApiProperty({
-    description: 'Codigo de registro del estudiante',
-    nullable: false,
-    example: 220014551,
-  })
-  @IsNumber()
-  @Min(0)
-  studentCode: number;
-
-  @ApiProperty({
-    description: 'ID de inscripción',
+    description: 'ID del estudiante',
     nullable: false,
     example: 1,
   })
   @IsNumber()
   @IsPositive()
-  registrationId: number;
+  studentId: number;
 
   @ApiProperty({
-    description: 'ID del grupo - materia',
+    description: 'ID de materia inscrita',
     nullable: false,
     example: 1,
   })
   @IsNumber()
   @IsPositive()
-  subjectGroupId: number;
+  registrationDetailId: number;
+
+  // @ApiProperty({
+  //   description: 'ID del grupo - materia',
+  //   nullable: false,
+  //   example: 1,
+  // })
+  // @IsNumber()
+  // @IsPositive()
+  // subjectGroupId: number;
 }

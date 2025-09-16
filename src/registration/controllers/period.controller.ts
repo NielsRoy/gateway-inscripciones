@@ -21,10 +21,11 @@ export class PeriodController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { termId, ...rest } = createPeriodDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'Period',
-      body: createPeriodDto,
+      body: { ...rest, term: { id: termId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class PeriodController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { termId, ...rest } = updatePeriodDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'Period',
-      body: { id, ...updatePeriodDto },
+      body: { id, ...rest, term: { id: termId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

@@ -4,7 +4,7 @@ import { IsNumber, IsPositive } from "class-validator";
 export class CreatePrerequisiteDto {
 
   @ApiProperty({
-    description: 'Codigo de una materia de algun plan de estudio',
+    description: 'ID de una materia de algun plan de estudio',
     nullable: false,
     example: 6,
   })
@@ -13,11 +13,11 @@ export class CreatePrerequisiteDto {
   planSubjectId: string;
 
   @ApiProperty({
-    description: 'Codigo de la materia prerequisito de algun plan de estudio',
+    description: 'ID de la materia prerequisito de algun plan de estudio',
     nullable: false,
     example: 2,
   })
   @IsNumber()
   @IsPositive()
-  prerequisiteCode: string;
+  prerequisiteId: string;
 }

@@ -21,10 +21,11 @@ export class PrerequisiteController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { planSubjectId, prerequisiteId } = createPrerequisiteDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'Prerequisite',
-      body: createPrerequisiteDto,
+      body: { planSubject: { id: planSubjectId }, prerequisitePlanSubject: { id: prerequisiteId } },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +80,11 @@ export class PrerequisiteController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { planSubjectId, prerequisiteId } = updatePrerequisiteDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'Prerequisite',
-      body: { id, ...updatePrerequisiteDto },
+      body: { id, planSubject: { id: planSubjectId }, prerequisitePlanSubject: { id: prerequisiteId } },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',

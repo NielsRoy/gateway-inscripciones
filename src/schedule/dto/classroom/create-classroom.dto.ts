@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsPositive } from "class-validator";
+import { IsNumber, IsOptional, IsPositive, Max } from "class-validator";
 
 export class CreateClassroomDto {
 
@@ -13,17 +13,17 @@ export class CreateClassroomDto {
   number: number;
 
   @ApiProperty({
-    description: 'Número del modulo',
+    description: 'ID del modulo',
     nullable: false,
-    example: 225,
+    example: 1,
   })
   @IsNumber()
   @IsPositive()
-  buildingNumber: number;
+  buildingId: number;
 
   @ApiProperty({
     description: 'Capacidad de ingreso de estudiantes',
-    nullable: false,
+    nullable: true,
     required: false,
     example: 35,
   })
@@ -31,4 +31,15 @@ export class CreateClassroomDto {
   @IsPositive()
   @IsOptional()
   capacity?: number;
+
+  @ApiProperty({
+    description: 'Piso',
+    nullable: true,
+    required: false,
+    example: 1,
+  })
+  @IsNumber()
+  @Max(300)
+  @IsOptional()
+  floor?: number;
 }

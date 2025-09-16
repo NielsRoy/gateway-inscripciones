@@ -7,7 +7,7 @@ export class CreateStudyPlanDto {
     description: 'Codigo del plan de estudio',
     nullable: false,
     uniqueItems: true,
-    example: '187-3',
+    example: '187-4',
   })
   @IsString()
   @IsNotEmpty()

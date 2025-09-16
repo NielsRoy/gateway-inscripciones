@@ -13,13 +13,13 @@ export class CreateSubjectGroupDto {
   group: string;
 
   @ApiProperty({
-    description: 'Codigo del docente',
+    description: 'ID del docente',
     nullable: false,
     example: 1,
   })
   @IsNumber()
   @IsPositive()
-  teacherCode: number;
+  teacherId: number;
 
   @ApiProperty({
     description: 'ID de materia - plan de estudio',

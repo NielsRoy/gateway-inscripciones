@@ -21,10 +21,16 @@ export class GroupScheduleController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { scheduleId, dayId, subjectGroupId, classroomId } = createGroupScheduleDto;
     const payload = {
       method: HttpMethod.POST,
       entity: 'GroupSchedule',
-      body: createGroupScheduleDto,
+      body: {
+        schedule: { id: scheduleId },
+        day: { id: dayId },
+        subjectGroup: { id: subjectGroupId },
+        classroom: { id: classroomId }
+      },
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -79,10 +85,16 @@ export class GroupScheduleController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
+    const { scheduleId, dayId, subjectGroupId, classroomId } = updateGroupScheduleDto;
     const payload = {
       method: HttpMethod.PATCH,
       entity: 'GroupSchedule',
-      body: { id, ...updateGroupScheduleDto },
+      body: { id,
+        schedule: { id: scheduleId },
+        day: { id: dayId },
+        subjectGroup: { id: subjectGroupId },
+        classroom: { id: classroomId }
+      },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',
