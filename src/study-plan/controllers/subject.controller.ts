@@ -1,66 +1,100 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateSubjectDto } from '../dto/subject/create-subject.dto';
 import { UpdateSubjectDto } from '../dto/subject/update-subject.dto';
-import { firstValueFrom } from 'rxjs';
-import { HttpMethod, KafkaService } from 'src/kafka.service';
 import type { Request } from 'express';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ProcessorService } from 'src/processor.service';
 
 @ApiTags('Materia')
 @Controller('subject')
 export class SubjectController {
   
   constructor(
-    private readonly kafkaService: KafkaService,
+    private readonly processorService: ProcessorService,
   ) {}
   
   @Post()
-  create(@Body() createSubjectDto: CreateSubjectDto, @Req() req: Request) {
+  create(
+    @Req() req: Request,
+    @Body() createSubjectDto: CreateSubjectDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
     const hash = (req as any).hash;
-
-    return this.kafkaService.emit({
+    const responseHash = (req as any).responseHash;
+    const payload = {
       method: HttpMethod.POST,
       entity: 'Subject',
       body: createSubjectDto,
       hash,
       replyTo: 'http://localhost:3000/api/reply',
-    });
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  //findAllProducts(@Query() paginationDto: PaginationDto) {
   @Get()
-  findAll(@Req() req: Request) {
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
     const hash = (req as any).hash;
-
-    return this.kafkaService.emit({
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
       method: HttpMethod.GET,
       entity: 'Subject',
       hash,
+      paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
-    });
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Get(':code')
-  findOne(@Param('code') code: string) {
-    //return this.subjectClient.send({ cmd: 'find_one_subject' }, { code });
+  @Get(':id')
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Subject',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
   
-  @Patch(':code')
-  update(@Param('code') code: string, @Body() updateSubjectDto: UpdateSubjectDto, @Req() req: Request) {
+  @Patch(':id')
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSubjectDto: UpdateSubjectDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
     const hash = (req as any).hash;
-
-    return this.kafkaService.emit({
+    const responseHash = (req as any).responseHash;
+    const payload = {
       method: HttpMethod.PATCH,
       entity: 'Subject',
-      body: { code, ...updateSubjectDto },
+      body: { id, ...updateSubjectDto },
       hash,
+      async,
       replyTo: 'http://localhost:3000/api/reply',
-    })
-    //return this.subjectClient.send({ cmd: 'update_subject' },{ code, ...updateSubjectDto });
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  // @Delete(':code')
-  // remove(@Param('code') code: string) {
-  //   //return this.subjectClient.send({ cmd: 'delete_subject' }, { code });
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.subjectClient.send({ cmd: 'delete_subject' }, { id });
   // }
 }

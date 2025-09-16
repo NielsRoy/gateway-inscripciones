@@ -1,12 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { KAFKA_SERVICE } from './config/services';
 import { envs } from './config/env';
-import { KafkaService } from './kafka.service';
+import { KAFKA_SERVICE, PROCESSOR_SERVICE } from './config/services';
+import { ProcessorService } from './processor.service';
 
 @Module({
   imports: [
     ClientsModule.register([
+      { 
+        name: PROCESSOR_SERVICE,
+        transport: Transport.TCP,
+        options: {
+          host: envs.processorHost,
+          port: envs.processorPort,
+        }
+      },
       { 
         name: KAFKA_SERVICE,
         transport: Transport.KAFKA,
@@ -18,8 +26,7 @@ import { KafkaService } from './kafka.service';
       },
     ]),
   ],
-  providers: [KafkaService],
-  exports: [KafkaService],
-  //exports: [ClientsModule],
+  providers: [ProcessorService],
+  exports: [ProcessorService],
 })
-export class KafkaModule {}
+export class ProcessorModule {}

@@ -5,8 +5,7 @@ import { CareerController } from './controllers/career.controller';
 import { SubjectController } from './controllers/subject.controller';
 import { PlanSubjectController } from './controllers/plan-subject.controller';
 import { PrerequisiteController } from './controllers/prerequisite.controller';
-import { LevelController } from './controllers/level.controller';
-import { KafkaModule } from 'src/kafka.module';
+import { ProcessorModule } from 'src/processor.module';
 
 @Module({
   controllers: [
@@ -15,9 +14,8 @@ import { KafkaModule } from 'src/kafka.module';
     SubjectController,
     PlanSubjectController,
     PrerequisiteController,
-    LevelController,
   ],
   providers: [StudyPlanService],
-  imports: [KafkaModule],
+  imports: [ProcessorModule],
 })
 export class StudyPlanModule {}

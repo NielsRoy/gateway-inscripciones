@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsInt, IsNumber, IsPositive, Max } from "class-validator";
+import { IsArray, IsBoolean, IsInt, IsNumber, IsPositive, Max, Min } from "class-validator";
 import { CreateRegistrationDetailDto } from "./registration-detail/create-registration-detail.dto";
 
 export class CreateRegistrationDto {
@@ -13,39 +13,30 @@ export class CreateRegistrationDto {
   online: boolean;
 
   @ApiProperty({
-    description: 'Año',
-    nullable: false,
-    example: 2027,
-  })
-  @IsNumber()
-  @IsPositive()
-  yearNumber: number;
-
-  @ApiProperty({
-    description: 'Periodo',
+    description: 'ID del Periodo',
     nullable: false,
     example: 1,
   })
   @IsNumber()
   @IsPositive()
-  @Max(10)
-  periodNumber: number;
+  @Min(1)
+  periodId: number;
 
   @ApiProperty({
-    description: 'Codigo del estudiante',
+    description: 'Id del estudiante',
     nullable: false,
-    example: 219012441,
+    example: 1,
   })
   @IsNumber()
   @IsPositive()
-  studentCode: number;
+  studentId: number;
 
-  @ApiProperty({
-    description: 'Lista de Grupo - Materias a inscribir',
-    nullable: false,
-    example: [1, 2]
-  })
-  @IsArray()
-  @IsInt({ each: true })
-  subjectGroupIds: number[];
+  // @ApiProperty({
+  //   description: 'Lista de ID de (Grupo - Materias) a inscribir',
+  //   nullable: false,
+  //   example: [1, 2]
+  // })
+  // @IsArray()
+  // @IsInt({ each: true })
+  // subjectGroupIds: number[];
 }

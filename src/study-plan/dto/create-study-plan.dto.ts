@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Min } from "class-validator";
 
 export class CreateStudyPlanDto {
 
@@ -14,11 +14,11 @@ export class CreateStudyPlanDto {
   code: string;
 
   @ApiProperty({
-    description: 'Codigo de la carrera',
+    description: 'ID de la carrera',
     nullable: false,
-    example: '187-3',
+    example: 1,
   })
-  @IsString()
-  @IsNotEmpty()
-  careerCode: string;
+  @IsNumber()
+  @Min(0)
+  careerId: number;
 }

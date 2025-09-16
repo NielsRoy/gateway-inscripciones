@@ -30,8 +30,8 @@ export class RegistrationController {
     return this.registrationService.update(+id, updateRegistrationDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.registrationService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.registrationService.remove(+id);
+  // }
 }

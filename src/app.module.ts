@@ -5,12 +5,14 @@ import { StudentModule } from './student/student.module';
 import { StudyPlanModule } from './study-plan/study-plan.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { RegistrationModule } from './registration/registration.module';
-import { KafkaModule } from './kafka.module';
+import { ProcessorModule } from './processor.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DeduplicateInterceptor } from './interceptors/deduplicate/deduplicate.interceptor';
 import { CacheService } from './cache.service';
+import { CommonModule } from './common/common.module';
+import { envs } from './config/env';
 
 @Module({
   imports: [
@@ -19,13 +21,15 @@ import { CacheService } from './cache.service';
     StudyPlanModule,
     ScheduleModule,
     RegistrationModule,
-    KafkaModule,
+    ProcessorModule,
     CacheModule.register({
       stores: [
-        new KeyvRedis('redis://localhost:6379')
+        new KeyvRedis(`redis://${envs.redisHost}:${envs.redisPort}`)
       ],
-      ttl: 1000 * 60 * 60,
-    })
+      isGlobal: true,
+      ttl: 1000 * 60,
+    }),
+    CommonModule
   ],
   controllers: [AppController],
   providers: [
