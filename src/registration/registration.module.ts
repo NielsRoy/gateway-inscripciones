@@ -6,10 +6,12 @@ import { PeriodController } from './controllers/period.controller';
 import { SubjectGroupController } from './controllers/subject-group.controller';
 import { GroupScheduleController } from './controllers/group-schedule.controller';
 import { ProcessorModule } from 'src/processor.module';
+import { RegistrationDetailController } from './controllers/registration-detail.controller';
 
 @Module({
   controllers: [
     RegistrationController,
+    RegistrationDetailController,
     TermController,
     PeriodController,
     SubjectGroupController,
