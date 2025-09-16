@@ -1,35 +1,98 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateGradeDto } from '../dto/create-grade.dto';
 import { UpdateGradeDto } from '../dto/update-grade.sto';
+import { ProcessorService } from 'src/processor.service';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Calificación')
 @Controller('grade')
 export class GradeController {
-  //constructor(private readonly studentService: StudentService) {}
+  
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
-  create(@Body() createGradeDto: CreateGradeDto) {
-    return 'This action adds a new grade';
+  create(
+    @Req() req: Request,
+    @Body() createGradeDto: CreateGradeDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'Grade',
+      body: createGradeDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll() {
-    return `This action returns all grade`;
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Grade',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return `This action returns a #${id} grade`;
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Grade',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateGradeDto: UpdateGradeDto) {
-    return `This action updates a #${id} grade`;
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateGradeDto: UpdateGradeDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'Grade',
+      body: { id, ...updateGradeDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return `This action removes a #${id} grade`;
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return `This action removes a #${id} grade`;
+  // }
 }

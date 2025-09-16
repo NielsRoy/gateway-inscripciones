@@ -1,35 +1,98 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateCareerDto } from '../dto/career/create-career.dto';
 import { UpdateCareerDto } from '../dto/career/update-career.dto';
+import { ProcessorService } from 'src/processor.service';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Carrera')
 @Controller('career')
 export class CareerController {
-  //constructor(private readonly studentService: StudentService) {}
+  
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
-  create(@Body() createCareerDto: CreateCareerDto) {
-    return 'This action adds a new career';
+  create(
+    @Req() req: Request,
+    @Body() createCareerDto: CreateCareerDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'Career',
+      body: createCareerDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll() {
-    return `This action returns all career`;
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Career',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Get(':code')
-  findOne(@Param('code') code: string) {
-    return `This action returns a #${code} career`;
+  @Get(':id')
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Career',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Patch(':code')
-  update(@Param('code') code: string, @Body() updateCareerDto: UpdateCareerDto) {
-    return `This action updates a #${code} career`;
+  @Patch(':id')
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCareerDto: UpdateCareerDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'Career',
+      body: { id, ...updateCareerDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Delete(':code')
-  remove(@Param('code') code: string) {
-    return `This action removes a #${code} career`;
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return `This action removes a #${id} career`;
+  // }
 }

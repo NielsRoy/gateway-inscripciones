@@ -1,30 +1,30 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateSubjectGroupDto } from '../dto/subject-group/create-subject-group.dto';
-import { UpdateSubjectGroupDto } from '../dto/subject-group/update-subject-group.dto';
+import { CreateTermDto } from '../dto/term/create-term.dto';
+import { UpdateTermDto } from '../dto/term/update-term.dto';
 import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
 
-@ApiTags('Grupo - Materia')
-@Controller('subject-group')
-export class SubjectGroupController {
+@ApiTags('Gestión')
+@Controller('term')
+export class TermController {
   
   constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
   create(
     @Req() req: Request,
-    @Body() createSubjectGroupDto: CreateSubjectGroupDto, 
+    @Body() createTermDto: CreateTermDto, 
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
     const payload = {
       method: HttpMethod.POST,
-      entity: 'SubjectGroup',
-      body: createSubjectGroupDto,
+      entity: 'Term',
+      body: createTermDto,
       hash,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -42,7 +42,7 @@ export class SubjectGroupController {
     const { async } = paginationDto;
     const payload = {
       method: HttpMethod.GET,
-      entity: 'SubjectGroup',
+      entity: 'Term',
       hash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
@@ -61,7 +61,7 @@ export class SubjectGroupController {
     const responseHash = (req as any).responseHash;
     const payload = {
       method: HttpMethod.GET,
-      entity: 'SubjectGroup',
+      entity: 'Term',
       hash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
@@ -74,15 +74,15 @@ export class SubjectGroupController {
   update(
     @Req() req: Request,
     @Param('id', ParseIntPipe) id: number,
-    @Body() UpdateSubjectGroupDto: UpdateSubjectGroupDto,
+    @Body() updateTermDto: UpdateTermDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
     const payload = {
       method: HttpMethod.PATCH,
-      entity: 'SubjectGroup',
-      body: { id, ...UpdateSubjectGroupDto },
+      entity: 'Term',
+      body: { id, ...updateTermDto },
       hash,
       async,
       replyTo: 'http://localhost:3000/api/reply',
@@ -92,7 +92,7 @@ export class SubjectGroupController {
   }
 
   // @Delete(':id')
-  // remove(@Param('id', ParseIntPipe) id: number) {
-  //   return `This action removes a #${id} career`;
+  // remove(@Param('id', ParseIntPipe) id: id) {
+  //   return `This action removes a #${id} building`;
   // }
 }

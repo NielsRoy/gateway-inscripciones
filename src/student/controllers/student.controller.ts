@@ -1,64 +1,98 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req } from '@nestjs/common';
-import { StudentService } from '../student.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req, Query, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
 import { CreateStudentDto } from '../dto/create-student.dto';
 import { UpdateStudentDto } from '../dto/update-student.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ProcessorService } from 'src/processor.service';
-import type { Request } from 'express';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Estudiante')
 @Controller('student')
 export class StudentController {
-  constructor(
-    private readonly kafkaService: ProcessorService,
-  ) {}
+
+  constructor(private readonly processorService: ProcessorService) {}
 
   @Post()
-  create(@Body() createStudentDto: CreateStudentDto, @Req() req: Request) {
+  create(
+    @Req() req: Request,
+    @Body() createStudentDto: CreateStudentDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
     const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'Student',
+      body: createStudentDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
 
-    // return this.kafkaService.emit({
-    //   method: HttpMethod.POST,
-    //   entity: 'Student',
-    //   body: createStudentDto,
-    //   hash,
-    //   replyTo: 'http://localhost:3000/api/reply',
-    // });
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll(@Req() req: Request) {
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
     const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Student',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
 
-    // return this.kafkaService.emit({
-    //   method: HttpMethod.GET,
-    //   entity: 'Student',
-    //   hash,
-    //   replyTo: 'http://localhost:3000/api/reply',
-    // });
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Get(':code')
-  findOne(@Param('code', ParseIntPipe) code: number) {
-    //return this.studentService.findOne(code);
-  }
-
-  @Patch(':code')
-  update(@Param('code', ParseIntPipe) code: number, @Body() updateStudentDto: UpdateStudentDto, @Req() req: Request) {
+  @Get(':id')
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
     const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Student',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
 
-    // return this.kafkaService.emit({
-    //   method: HttpMethod.PATCH,
-    //   entity: 'Student',
-    //   body: { code, ...updateStudentDto },
-    //   hash,
-    //   replyTo: 'http://localhost:3000/api/reply',
-    // })
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  // @Delete(':code')
-  // remove(@Param('code', ParseIntPipe) code: number) {
-  //   return this.studentService.remove(code);
+  @Patch(':id')
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateStudentDto: UpdateStudentDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'Student',
+      body: { id, ...updateStudentDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
+  }
+
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.studentService.remove(id);
   // }
 }

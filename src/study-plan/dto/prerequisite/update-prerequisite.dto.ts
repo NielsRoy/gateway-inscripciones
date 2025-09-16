@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/swagger';
-import { PrerequisiteDto } from './prerequisite.dto';
+import { CreatePrerequisiteDto } from './create-prerequisite.dto';
 
-export class UpdatePrerequisiteDto extends PartialType(PrerequisiteDto) {}
+export class UpdatePrerequisiteDto extends PartialType(CreatePrerequisiteDto) {}

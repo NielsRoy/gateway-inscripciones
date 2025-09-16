@@ -1,35 +1,98 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PrerequisiteDto } from '../dto/prerequisite/prerequisite.dto';
-//import { UpdatePrerequisiteDto } from '../dto/prerequisite/update-prerequisite.dto';
+import { CreatePrerequisiteDto } from '../dto/prerequisite/create-prerequisite.dto';
+import { UpdatePrerequisiteDto } from '../dto/prerequisite/update-prerequisite.dto';
+import { ProcessorService } from 'src/processor.service';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Prerequisito')
 @Controller('prerequisite')
 export class PrerequisiteController {
-  //constructor(private readonly studentService: StudentService) {}
+  
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
-  create(@Body() prerequisiteDto: PrerequisiteDto) {
-    return 'This action adds a new career';
+  create(
+    @Req() req: Request,
+    @Body() createPrerequisiteDto: CreatePrerequisiteDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'Prerequisite',
+      body: createPrerequisiteDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll() {
-    return `This action returns all career`;
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Prerequisite',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  // @Get(':id')
-  // findOne(@Param('id', ParseIntPipe) id: number) {
-  //   return `This action returns a #${id} career`;
-  // }
+  @Get(':id')
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Prerequisite',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
 
-  // @Patch(':id')
-  // update(@Param('id', ParseIntPipe) id: number, @Body() updatePrerequisiteDto: UpdatePrerequisiteDto) {
-  //   return `This action updates a #${id} career`;
-  // }
-
-  @Delete()
-  remove(@Body() prerequisiteDto: PrerequisiteDto) {
-    return `This action removes a prerequisite`;
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
+
+  @Patch(':id')
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePrerequisiteDto: UpdatePrerequisiteDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'Prerequisite',
+      body: { id, ...updatePrerequisiteDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
+  }
+
+  // @Delete()
+  // remove(@Body() prerequisiteDto: PrerequisiteDto) {
+  //   return `This action removes a prerequisite`;
+  // }
 }

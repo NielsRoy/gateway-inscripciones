@@ -1,35 +1,98 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePeriodDto } from '../dto/period/create-period.dto';
 import { UpdatePeriodDto } from '../dto/period/update-period.dto';
+import { ProcessorService } from 'src/processor.service';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Periodo')
 @Controller('period')
 export class PeriodController {
-  //constructor(private readonly studentService: StudentService) {}
+  
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
-  create(@Body() createPeriodDto: CreatePeriodDto) {
-    return 'This action adds a new building';
+  create(
+    @Req() req: Request,
+    @Body() createPeriodDto: CreatePeriodDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'Period',
+      body: createPeriodDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll() {
-    return `This action returns all building`;
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Period',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Get(':number')
-  findOne(@Param('number', ParseIntPipe) number: number) {
-    return `This action returns a #${number} building`;
+  @Get(':id')
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'Period',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Patch(':number')
-  update(@Param('number', ParseIntPipe) number: number, @Body() updatePeriodDto: UpdatePeriodDto) {
-    return `This action updates a #${number} building`;
+  @Patch(':id')
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePeriodDto: UpdatePeriodDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'Period',
+      body: { id, ...updatePeriodDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Delete(':number')
-  remove(@Param('number', ParseIntPipe) number: number) {
-    return `This action removes a #${number} building`;
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: id) {
+  //   return `This action removes a #${id} building`;
+  // }
 }

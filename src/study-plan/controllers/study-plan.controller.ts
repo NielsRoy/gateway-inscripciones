@@ -1,21 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req } from '@nestjs/common';
-import { StudyPlanService } from '../study-plan.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req, DefaultValuePipe, ParseBoolPipe, ParseIntPipe } from '@nestjs/common';
 import { CreateStudyPlanDto } from '../dto/create-study-plan.dto';
 import { UpdateStudyPlanDto } from '../dto/update-study-plan.dto';
 import { ApiTags } from '@nestjs/swagger';
-import type { Request } from 'express';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { ProcessorService } from 'src/processor.service';
+import type { Request } from 'express';
 
 @ApiTags('Plan de estudio')
 @Controller('study-plan')
 export class StudyPlanController {
+  
   constructor(private readonly processorService: ProcessorService) {}
 
   @Post()
-  create(@Body() createStudyPlanDto: CreateStudyPlanDto) {
-    //return this.studyPlanService.create(createStudyPlanDto);
+  create(
+    @Req() req: Request,
+    @Body() createStudyPlanDto: CreateStudyPlanDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'StudyPlan',
+      body: createStudyPlanDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
@@ -38,13 +52,43 @@ export class StudyPlanController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    //return this.studyPlanService.findOne(+id);
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'StudyPlan',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudyPlanDto: UpdateStudyPlanDto) {
-    //return this.studyPlanService.update(+id, updateStudyPlanDto);
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateStudyPlanDto: UpdateStudyPlanDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'StudyPlan',
+      body: { id, ...updateStudyPlanDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   // @Delete(':id')

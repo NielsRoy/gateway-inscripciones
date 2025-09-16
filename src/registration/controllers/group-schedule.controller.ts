@@ -1,35 +1,98 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateGroupScheduleDto } from '../dto/group-schedule/create-group-schedule.dto';
 import { UpdateGroupScheduleDto } from '../dto/group-schedule/update-group-schedule.dto';
+import { ProcessorService } from 'src/processor.service';
+import { HttpMethod } from 'src/common/interfaces/processor.interface';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import type { Request } from 'express';
 
 @ApiTags('Horario - Grupo')
 @Controller('group-schedule')
 export class GroupScheduleController {
-  //constructor(private readonly studentService: StudentService) {}
+  
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
-  create(@Body() createGroupScheduleDto: CreateGroupScheduleDto) {
-    return 'This action adds a new career';
+  create(
+    @Req() req: Request,
+    @Body() createGroupScheduleDto: CreateGroupScheduleDto, 
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.POST,
+      entity: 'GroupSchedule',
+      body: createGroupScheduleDto,
+      hash,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get()
-  findAll() {
-    return `This action returns all career`;
+  findAll(
+    @Req() req: Request,
+    @Query() paginationDto: PaginationDto,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const { async } = paginationDto;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'GroupSchedule',
+      hash,
+      paginationDto,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return `This action returns a #${id} career`;
+  findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.GET,
+      entity: 'GroupSchedule',
+      hash,
+      body: { id },
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateGroupScheduleDto: UpdateGroupScheduleDto) {
-    return `This action updates a #${id} career`;
+  update(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateGroupScheduleDto: UpdateGroupScheduleDto,
+    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
+  ) {
+    const hash = (req as any).hash;
+    const responseHash = (req as any).responseHash;
+    const payload = {
+      method: HttpMethod.PATCH,
+      entity: 'GroupSchedule',
+      body: { id, ...updateGroupScheduleDto },
+      hash,
+      async,
+      replyTo: 'http://localhost:3000/api/reply',
+    };
+    
+    return this.processorService.handleRequest(payload, async, responseHash);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return `This action removes a #${id} career`;
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return `This action removes a #${id} career`;
+  // }
 }

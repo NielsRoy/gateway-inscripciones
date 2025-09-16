@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
-import { RegistrationController } from './registration.controller';
-import { YearController } from './controllers/year.controller';
+import { RegistrationController } from './controllers/registration.controller';
+import { TermController } from './controllers/term.controller';
 import { PeriodController } from './controllers/period.controller';
 import { SubjectGroupController } from './controllers/subject-group.controller';
 import { GroupScheduleController } from './controllers/group-schedule.controller';
+import { ProcessorModule } from 'src/processor.module';
 
 @Module({
   controllers: [
     RegistrationController,
-    YearController,
+    TermController,
     PeriodController,
     SubjectGroupController,
     GroupScheduleController,
   ],
   providers: [RegistrationService],
+  imports: [ProcessorModule],
 })
 export class RegistrationModule {}

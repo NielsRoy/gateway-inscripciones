@@ -2,18 +2,16 @@ import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, 
 import { ApiTags } from '@nestjs/swagger';
 import { CreateSubjectDto } from '../dto/subject/create-subject.dto';
 import { UpdateSubjectDto } from '../dto/subject/update-subject.dto';
-import type { Request } from 'express';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ProcessorService } from 'src/processor.service';
+import type { Request } from 'express';
 
 @ApiTags('Materia')
 @Controller('subject')
 export class SubjectController {
   
-  constructor(
-    private readonly processorService: ProcessorService,
-  ) {}
+  constructor(private readonly processorService: ProcessorService) {}
   
   @Post()
   create(
