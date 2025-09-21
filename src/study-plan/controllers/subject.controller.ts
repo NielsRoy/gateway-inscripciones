@@ -26,6 +26,7 @@ export class SubjectController {
       entity: 'Subject',
       body: createSubjectDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -44,6 +45,7 @@ export class SubjectController {
       method: HttpMethod.GET,
       entity: 'Subject',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -63,6 +65,7 @@ export class SubjectController {
       method: HttpMethod.GET,
       entity: 'Subject',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -84,7 +87,7 @@ export class SubjectController {
       entity: 'Subject',
       body: { id, ...updateSubjectDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

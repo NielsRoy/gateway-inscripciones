@@ -10,5 +10,5 @@ export class CreateTermDto {
   })
   @IsNumber()
   @IsPositive()
-  number: number;
+  year: number;
 }

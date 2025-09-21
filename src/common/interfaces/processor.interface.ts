@@ -11,6 +11,7 @@ export interface ProcessorPayload {
   entity: any;
   body?: any;
   hash: string;
+  responseHash: string;
   paginationDto?: PaginationDto;
   //async: boolean;
   replyTo: string;

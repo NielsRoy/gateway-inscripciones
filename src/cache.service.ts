@@ -1,6 +1,6 @@
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Inject, Injectable } from "@nestjs/common";
-import * as crypto from "crypto";
+import { Inject, Injectable, Logger } from "@nestjs/common";
+// import * as crypto from "crypto";
 
 export enum ContentType {
   REQUEST = 'REQUEST',
@@ -9,7 +9,7 @@ export enum ContentType {
 
 interface HttpResponse {
   hash: string;
-  contentType: ContentType; 
+  responseHash: string;
   body: any;
 }
 
@@ -23,24 +23,22 @@ export interface CachePayload {
 @Injectable()
 export class CacheService {
   
+  private logger = new Logger('CacheService');
+
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async handleReply(res: HttpResponse) {
-    const { hash, body } = res;
-    //console.log('body en CacheService: ', body);
-    const value = await this.cacheManager.get<CachePayload>(hash);
-    if (value) {
-      value.contentType = ContentType.RESPONSE;
-    }
-    //console.log('value en CacheService: ', value);
-    const responseHash = this.hashPayload(value);
+    const { hash, responseHash, body } = res;
+    //this.logger.warn({body});
+    // const value = await this.cacheManager.get<CachePayload>(hash);
+    const value = await this.cacheManager.get(hash);
     await this.cacheManager.set(responseHash, body);
     if (value) {
       await this.cacheManager.del(hash);
     }
   }
 
-  private hashPayload(request: any): string {
-    return crypto.createHash("sha256").update(JSON.stringify(request)).digest("hex");
-  }
+  // private hashPayload(request: any): string {
+  //   return crypto.createHash("sha256").update(JSON.stringify(request)).digest("hex");
+  // }
 }

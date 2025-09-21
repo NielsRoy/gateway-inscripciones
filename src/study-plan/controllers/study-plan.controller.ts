@@ -27,6 +27,7 @@ export class StudyPlanController {
       entity: 'StudyPlan',
       body: { ...rest, career: { id: careerId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class StudyPlanController {
       method: HttpMethod.GET,
       entity: 'StudyPlan',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class StudyPlanController {
       method: HttpMethod.GET,
       entity: 'StudyPlan',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,7 +89,7 @@ export class StudyPlanController {
       entity: 'StudyPlan',
       body: { id, ...rest, career: { id: careerId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

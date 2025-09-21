@@ -27,6 +27,7 @@ export class PeriodController {
       entity: 'Period',
       body: { ...rest, term: { id: termId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class PeriodController {
       method: HttpMethod.GET,
       entity: 'Period',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class PeriodController {
       method: HttpMethod.GET,
       entity: 'Period',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,6 +89,7 @@ export class PeriodController {
       entity: 'Period',
       body: { id, ...rest, term: { id: termId } },
       hash,
+      responseHash,
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };

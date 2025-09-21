@@ -26,6 +26,7 @@ export class TeacherController {
       entity: 'Teacher',
       body: createTeacherDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -44,6 +45,7 @@ export class TeacherController {
       method: HttpMethod.GET,
       entity: 'Teacher',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -63,6 +65,7 @@ export class TeacherController {
       method: HttpMethod.GET,
       entity: 'Teacher',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -84,7 +87,7 @@ export class TeacherController {
       entity: 'Teacher',
       body: { id, ...updateTeacherDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

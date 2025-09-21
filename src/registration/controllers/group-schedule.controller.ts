@@ -32,6 +32,7 @@ export class GroupScheduleController {
         classroom: { id: classroomId }
       },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -50,6 +51,7 @@ export class GroupScheduleController {
       method: HttpMethod.GET,
       entity: 'GroupSchedule',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -69,6 +71,7 @@ export class GroupScheduleController {
       method: HttpMethod.GET,
       entity: 'GroupSchedule',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -96,6 +99,7 @@ export class GroupScheduleController {
         classroom: { id: classroomId }
       },
       hash,
+      responseHash,
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };

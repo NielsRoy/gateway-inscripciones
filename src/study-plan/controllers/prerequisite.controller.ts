@@ -27,6 +27,7 @@ export class PrerequisiteController {
       entity: 'Prerequisite',
       body: { planSubject: { id: planSubjectId }, prerequisitePlanSubject: { id: prerequisiteId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class PrerequisiteController {
       method: HttpMethod.GET,
       entity: 'Prerequisite',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class PrerequisiteController {
       method: HttpMethod.GET,
       entity: 'Prerequisite',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,7 +89,7 @@ export class PrerequisiteController {
       entity: 'Prerequisite',
       body: { id, planSubject: { id: planSubjectId }, prerequisitePlanSubject: { id: prerequisiteId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

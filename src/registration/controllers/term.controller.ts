@@ -26,6 +26,7 @@ export class TermController {
       entity: 'Term',
       body: createTermDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -44,6 +45,7 @@ export class TermController {
       method: HttpMethod.GET,
       entity: 'Term',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -63,6 +65,7 @@ export class TermController {
       method: HttpMethod.GET,
       entity: 'Term',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -84,7 +87,7 @@ export class TermController {
       entity: 'Term',
       body: { id, ...updateTermDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

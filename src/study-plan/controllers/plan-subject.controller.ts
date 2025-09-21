@@ -27,6 +27,7 @@ export class PlanSubjectController {
       entity: 'PlanSubject',
       body: { ...rest, subject: { id: subjectId }, studyPlan: { id: studyPlanId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class PlanSubjectController {
       method: HttpMethod.GET,
       entity: 'PlanSubject',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class PlanSubjectController {
       method: HttpMethod.GET,
       entity: 'PlanSubject',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,7 +89,7 @@ export class PlanSubjectController {
       entity: 'PlanSubject',
       body: { id, ...rest, subject: { id: subjectId }, studyPlan: { id: studyPlanId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

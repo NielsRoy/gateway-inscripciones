@@ -21,11 +21,12 @@ export class StudentController {
   ) {
     const hash = (req as any).hash;
     const responseHash = (req as any).responseHash;
-    const payload = {
+    const payload  = {
       method: HttpMethod.POST,
       entity: 'Student',
       body: createStudentDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -44,6 +45,7 @@ export class StudentController {
       method: HttpMethod.GET,
       entity: 'Student',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -63,6 +65,7 @@ export class StudentController {
       method: HttpMethod.GET,
       entity: 'Student',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -84,7 +87,7 @@ export class StudentController {
       entity: 'Student',
       body: { id, ...updateStudentDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
     

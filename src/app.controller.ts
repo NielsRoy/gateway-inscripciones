@@ -19,8 +19,8 @@ export class AppController {
     this.cacheService.handleReply(body);
   }
 
-  @Get('study-plan/:code/subjects')
-  getSubjects(@Param('code') code: string) {
-    //return this.client.send({ cmd: 'get_study_plan_subjects' }, { code });
-  }
+  // @Get('study-plan/:code/subjects')
+  // getSubjects(@Param('code') code: string) {
+  //   //return this.client.send({ cmd: 'get_study_plan_subjects' }, { code });
+  // }
 }
