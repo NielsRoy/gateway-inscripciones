@@ -28,6 +28,7 @@ export class GradeController {
       entity: 'Grade',
       body: { ...rest, registrationDetail: { id: registrationDetailId }, student: { id: studentId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -46,6 +47,7 @@ export class GradeController {
       method: HttpMethod.GET,
       entity: 'Grade',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -65,6 +67,7 @@ export class GradeController {
       method: HttpMethod.GET,
       entity: 'Grade',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -87,7 +90,7 @@ export class GradeController {
       entity: 'Grade',
       body: { id, ...rest, registrationDetail: { id: registrationDetailId }, student: { id: studentId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

@@ -28,6 +28,7 @@ export class RegistrationController {
       entity: 'Registration',
       body: { ...rest, student: { id: studentId }, period: { id: periodId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -46,6 +47,7 @@ export class RegistrationController {
       method: HttpMethod.GET,
       entity: 'Registration',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -65,6 +67,7 @@ export class RegistrationController {
       method: HttpMethod.GET,
       entity: 'Registration',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -87,6 +90,7 @@ export class RegistrationController {
       entity: 'Registration',
       body: { id, ...rest, student: { id: studentId }, period: { id: periodId } },
       hash,
+      responseHash,
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };

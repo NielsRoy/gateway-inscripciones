@@ -27,6 +27,7 @@ export class BuildingController {
       entity: 'Building',
       body: createBuildingDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class BuildingController {
       method: HttpMethod.GET,
       entity: 'Building',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class BuildingController {
       method: HttpMethod.GET,
       entity: 'Building',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -85,7 +88,7 @@ export class BuildingController {
       entity: 'Building',
       body: { id, ...updateBuildingDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

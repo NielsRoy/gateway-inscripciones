@@ -27,6 +27,7 @@ export class CareerController {
       entity: 'Career',
       body: createCareerDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class CareerController {
       method: HttpMethod.GET,
       entity: 'Career',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class CareerController {
       method: HttpMethod.GET,
       entity: 'Career',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -85,7 +88,7 @@ export class CareerController {
       entity: 'Career',
       body: { id, ...updateCareerDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

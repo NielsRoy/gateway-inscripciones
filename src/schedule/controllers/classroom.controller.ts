@@ -27,6 +27,7 @@ export class ClassroomController {
       entity: 'Classroom',
       body: { ...rest, building: { id: buildingId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -45,6 +46,7 @@ export class ClassroomController {
       method: HttpMethod.GET,
       entity: 'Classroom',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -64,6 +66,7 @@ export class ClassroomController {
       method: HttpMethod.GET,
       entity: 'Classroom',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,7 +89,7 @@ export class ClassroomController {
       entity: 'Classroom',
       body: { id, ...rest, building: { id: buildingId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

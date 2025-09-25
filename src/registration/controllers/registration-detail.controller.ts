@@ -28,6 +28,7 @@ export class RegistrationDetailController {
       entity: 'RegistrationDetail',
       body: { registration: { id: registrationId }, subjectGroup: { id: subjectGroupId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -46,6 +47,7 @@ export class RegistrationDetailController {
       method: HttpMethod.GET,
       entity: 'RegistrationDetail',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -65,6 +67,7 @@ export class RegistrationDetailController {
       method: HttpMethod.GET,
       entity: 'RegistrationDetail',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -87,7 +90,7 @@ export class RegistrationDetailController {
       entity: 'RegistrationDetail',
       body: { id, registration: { id: registrationId }, subjectGroup: { id: subjectGroupId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

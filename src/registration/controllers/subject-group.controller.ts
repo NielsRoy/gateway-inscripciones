@@ -28,6 +28,7 @@ export class SubjectGroupController {
       entity: 'SubjectGroup',
       body: { ...rest, teacher: { id: teacherId }, planSubject: { id: planSubjectId } },
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -46,6 +47,7 @@ export class SubjectGroupController {
       method: HttpMethod.GET,
       entity: 'SubjectGroup',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -65,6 +67,7 @@ export class SubjectGroupController {
       method: HttpMethod.GET,
       entity: 'SubjectGroup',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -87,7 +90,7 @@ export class SubjectGroupController {
       entity: 'SubjectGroup',
       body: { id, ...rest, teacher: { id: teacherId }, planSubject: { id: planSubjectId } },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

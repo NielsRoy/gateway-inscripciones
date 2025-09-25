@@ -28,6 +28,7 @@ export class ScheduleController {
       entity: 'Schedule',
       body: createScheduleDto,
       hash,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 
@@ -46,6 +47,7 @@ export class ScheduleController {
       method: HttpMethod.GET,
       entity: 'Schedule',
       hash,
+      responseHash,
       paginationDto,
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -65,6 +67,7 @@ export class ScheduleController {
       method: HttpMethod.GET,
       entity: 'Schedule',
       hash,
+      responseHash,
       body: { id },
       replyTo: 'http://localhost:3000/api/reply',
     };
@@ -86,7 +89,7 @@ export class ScheduleController {
       entity: 'Schedule',
       body: { id, ...updateScheduleDto },
       hash,
-      async,
+      responseHash,
       replyTo: 'http://localhost:3000/api/reply',
     };
 

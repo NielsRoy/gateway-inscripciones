@@ -22,21 +22,27 @@ export class DeduplicateInterceptor implements NestInterceptor {
       body: request.body,
     };
     const requestHash = this.hashPayload(payload);
-    payload.contentType = ContentType.RESPONSE;
-    const responseHash = this.hashPayload(payload);
-    return from(this.cacheManager.get(requestHash)).pipe(
-      switchMap((reqValue) => {
-        if (reqValue) {
-          //console.log('Ya existe requestHash:', reqValue);
-          return of({ message: 'Procesando la petición' });
+    const responsePayload = {
+      endpoint: url,
+      method: request.method,
+      contentType: ContentType.RESPONSE,
+      body: request.body,
+    };
+    const responseHash = this.hashPayload(responsePayload);
+    
+    return from(this.cacheManager.get(responseHash)).pipe(
+      switchMap((resValue) => {
+        if (resValue) {
+          //console.log('Ya existe responseHash:', resValue);
+          return of(resValue); // devolvemos la respuesta cacheada
         }
 
-        // Si no existe requestHash, buscamos el responseHash
-        return from(this.cacheManager.get<CachePayload>(responseHash)).pipe(
-          switchMap((resValue) => {
-            if (resValue) {
-              //console.log('Ya existe responseHash:', resValue);
-              return of(resValue); // devolvemos la respuesta cacheada
+        // Si no existe responseHash, buscamos el requestHash
+        return from(this.cacheManager.get(requestHash)).pipe(
+          switchMap((reqValue) => {
+            if (reqValue) {
+              //console.log('Ya existe requestHash:', reqValue);
+              return of({ message: 'Procesando la petición' });
             }
 
             // Si no existe ninguno, guardamos requestHash

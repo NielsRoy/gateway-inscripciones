@@ -36,7 +36,7 @@ export class ProcessorService {
       result = await lastValueFrom(this.processorClient.send<string, ProcessorPayload>(PROCESSOR_MESSAGE_PATTERN, payload));
       return result;
     } catch(error) {
-      console.log('Error en processor.service: ', error);
+      //console.log('Error en processor.service: ', error);
       result = error;
       throw error;
     }
