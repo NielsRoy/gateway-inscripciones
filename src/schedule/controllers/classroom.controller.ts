@@ -6,6 +6,7 @@ import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { UpdateClassroomDto } from '../dto/classroom/update-classroom.dto';
 import type { Request } from 'express';
+import { KAFKA_SCHEDULE_TOPIC } from 'src/config/services';
 
 @ApiTags('Aula')
 @Controller('classroom')

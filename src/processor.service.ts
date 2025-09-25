@@ -1,6 +1,6 @@
 import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import type { ClientKafkaProxy, ClientProxy } from '@nestjs/microservices';
-import { KAFKA_SERVICE, KAFKA_TOPIC, PROCESSOR_MESSAGE_PATTERN, PROCESSOR_SERVICE } from './config/services';
+import { KAFKA_SERVICE, PROCESSOR_MESSAGE_PATTERN, PROCESSOR_SERVICE } from './config/services';
 import { ProcessorPayload } from './common/interfaces/processor.interface';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { lastValueFrom } from 'rxjs';
@@ -16,13 +16,13 @@ export class ProcessorService {
 
   handleRequest(payload: ProcessorPayload, async: boolean, responseHash: string, topicName: string) {
     if (async) {
-      return this.emit(payload);
+      return this.emit(payload, topicName);
     }
 
     return this.send(payload, responseHash);
   }
 
-  private emit(payload: ProcessorPayload) {
+  private emit(payload: ProcessorPayload, topicName: string) {
     return this.kafkaClient.emit<string, ProcessorPayload>(
       topicName,
       payload,

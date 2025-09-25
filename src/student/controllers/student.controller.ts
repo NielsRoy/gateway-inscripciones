@@ -6,6 +6,7 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_STUDENT_TOPIC } from 'src/config/services';
 
 @ApiTags('Estudiante')
 @Controller('student')

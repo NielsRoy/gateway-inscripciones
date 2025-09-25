@@ -6,6 +6,7 @@ import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ProcessorService } from 'src/processor.service';
 import type { Request } from 'express';
+import { KAFKA_STUDY_PLAN_TOPIC } from 'src/config/services';
 
 @ApiTags('Materia')
 @Controller('subject')
