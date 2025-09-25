@@ -1,4 +1,9 @@
 export const PROCESSOR_SERVICE = 'PROCESSOR_SERVICE';
 export const PROCESSOR_MESSAGE_PATTERN = 'sync_services';
 export const KAFKA_SERVICE = 'KAFKA_SERVICE';
-export const KAFKA_TOPIC = 'enrollment-events';
+// export const KAFKA_TOPIC = 'enrollment-events';
+export const KAFKA_REGISTRATION_TOPIC = 'registration-events';
+export const KAFKA_SCHEDULE_TOPIC = 'schedule-events';
+export const KAFKA_STUDENT_TOPIC = 'student-events';
+export const KAFKA_STUDY_PLAN_TOPIC = 'study-plan-events';
+export const KAFKA_TEACHER_TOPIC = 'teacher-events';

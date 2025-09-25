@@ -12,13 +12,13 @@ import type { Request } from 'express';
 @ApiTags('Horario')
 @Controller('schedule')
 export class ScheduleController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createScheduleDto: CreateScheduleDto, 
+    @Body() createScheduleDto: CreateScheduleDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -31,7 +31,7 @@ export class ScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Get()
@@ -50,7 +50,7 @@ export class ScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Get(':id')
@@ -69,7 +69,7 @@ export class ScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Patch(':id')
@@ -89,8 +89,8 @@ export class ScheduleController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   // @Delete(':id')

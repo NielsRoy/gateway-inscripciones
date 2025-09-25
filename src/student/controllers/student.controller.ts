@@ -29,7 +29,7 @@ export class StudentController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Get()
@@ -48,7 +48,7 @@ export class StudentController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Get(':id')
@@ -67,7 +67,7 @@ export class StudentController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Patch(':id')
@@ -87,8 +87,8 @@ export class StudentController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   // @Delete(':id')

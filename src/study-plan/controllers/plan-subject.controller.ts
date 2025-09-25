@@ -10,13 +10,13 @@ import type { Request } from 'express';
 @ApiTags('Materia - Plan de estudio')
 @Controller('plan-subject')
 export class PlanSubjectController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createPlanSubjectDto: CreatePlanSubjectDto, 
+    @Body() createPlanSubjectDto: CreatePlanSubjectDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -30,7 +30,7 @@ export class PlanSubjectController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Get()
@@ -49,7 +49,7 @@ export class PlanSubjectController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Get(':id')
@@ -68,7 +68,7 @@ export class PlanSubjectController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Patch(':id')
@@ -89,8 +89,8 @@ export class PlanSubjectController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   // @Delete(':id')

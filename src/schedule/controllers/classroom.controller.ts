@@ -10,13 +10,13 @@ import type { Request } from 'express';
 @ApiTags('Aula')
 @Controller('classroom')
 export class ClassroomController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createClassroomDto: CreateClassroomDto, 
+    @Body() createClassroomDto: CreateClassroomDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -30,7 +30,7 @@ export class ClassroomController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Get()
@@ -49,7 +49,7 @@ export class ClassroomController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Get(':id')
@@ -68,7 +68,7 @@ export class ClassroomController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   @Patch(':id')
@@ -89,8 +89,8 @@ export class ClassroomController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_SCHEDULE_TOPIC);
   }
 
   // @Delete(':id')

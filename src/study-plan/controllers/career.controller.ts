@@ -6,17 +6,18 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_STUDY_PLAN_TOPIC } from 'src/config/services';
 
 @ApiTags('Carrera')
 @Controller('career')
 export class CareerController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createCareerDto: CreateCareerDto, 
+    @Body() createCareerDto: CreateCareerDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -29,7 +30,7 @@ export class CareerController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Get()
@@ -48,7 +49,7 @@ export class CareerController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Get(':id')
@@ -67,7 +68,7 @@ export class CareerController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   @Patch(':id')
@@ -87,8 +88,8 @@ export class CareerController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDY_PLAN_TOPIC);
   }
 
   // @Delete(':id')

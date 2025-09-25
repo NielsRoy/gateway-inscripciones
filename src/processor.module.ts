@@ -7,7 +7,7 @@ import { ProcessorService } from './processor.service';
 @Module({
   imports: [
     ClientsModule.register([
-      { 
+      {
         name: PROCESSOR_SERVICE,
         transport: Transport.TCP,
         options: {
@@ -15,12 +15,20 @@ import { ProcessorService } from './processor.service';
           port: envs.processorPort,
         }
       },
-      { 
+      {
         name: KAFKA_SERVICE,
         transport: Transport.KAFKA,
         options: {
           client: {
             brokers: [`${envs.kafkaHost}:${envs.kafkaPort}`],
+          },
+          consumer: {
+            groupId: 'no-consumer',
+            allowAutoTopicCreation: false, // de todas maneras en Kafka ya no se permite la creación automática de topics
+          },
+          producer: {
+            allowAutoTopicCreation: false,
+            // idempotent: true,
           },
         },
       },

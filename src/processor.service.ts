@@ -14,16 +14,19 @@ export class ProcessorService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-  handleRequest(payload: ProcessorPayload, async: boolean, responseHash: string) {
+  handleRequest(payload: ProcessorPayload, async: boolean, responseHash: string, topicName: string) {
     if (async) {
       return this.emit(payload);
     }
-    
+
     return this.send(payload, responseHash);
   }
-  
+
   private emit(payload: ProcessorPayload) {
-    return this.kafkaClient.emit<string, ProcessorPayload>(KAFKA_TOPIC, payload);
+    return this.kafkaClient.emit<string, ProcessorPayload>(
+      topicName,
+      payload,
+    );
   }
 
   private async send(payload: ProcessorPayload, responseHash: string) {
@@ -36,7 +39,7 @@ export class ProcessorService {
       console.log('Error en processor.service: ', error);
       result = error;
       throw error;
-    } 
+    }
     finally {
       await this.cacheManager.set(responseHash, result);
       const value = await this.cacheManager.get(hash);

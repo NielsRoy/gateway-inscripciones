@@ -1,4 +1,16 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  Param,
+  ParseBoolPipe,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateGroupScheduleDto } from '../dto/group-schedule/create-group-schedule.dto';
 import { UpdateGroupScheduleDto } from '../dto/group-schedule/update-group-schedule.dto';
@@ -6,17 +18,18 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_REGISTRATION_TOPIC } from 'src/config/services';
 
 @ApiTags('Horario - Grupo')
 @Controller('group-schedule')
 export class GroupScheduleController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createGroupScheduleDto: CreateGroupScheduleDto, 
+    @Body() createGroupScheduleDto: CreateGroupScheduleDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -35,7 +48,12 @@ export class GroupScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(
+      payload,
+      async,
+      responseHash,
+      KAFKA_REGISTRATION_TOPIC,
+    );
   }
 
   @Get()
@@ -54,7 +72,12 @@ export class GroupScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(
+      payload,
+      async,
+      responseHash,
+      KAFKA_REGISTRATION_TOPIC,
+    );
   }
 
   @Get(':id')
@@ -73,7 +96,12 @@ export class GroupScheduleController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(
+      payload,
+      async,
+      responseHash,
+      KAFKA_REGISTRATION_TOPIC,
+    );
   }
 
   @Patch(':id')
@@ -99,8 +127,13 @@ export class GroupScheduleController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(
+      payload,
+      async,
+      responseHash,
+      KAFKA_REGISTRATION_TOPIC,
+    );
   }
 
   // @Delete(':id')

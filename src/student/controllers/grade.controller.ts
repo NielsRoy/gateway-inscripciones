@@ -6,17 +6,18 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_STUDENT_TOPIC } from 'src/config/services';
 
 @ApiTags('Calificación')
 @Controller('grade')
 export class GradeController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createGradeDto: CreateGradeDto, 
+    @Body() createGradeDto: CreateGradeDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -30,7 +31,7 @@ export class GradeController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Get()
@@ -49,7 +50,7 @@ export class GradeController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Get(':id')
@@ -68,7 +69,7 @@ export class GradeController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   @Patch(':id')
@@ -89,8 +90,8 @@ export class GradeController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_STUDENT_TOPIC);
   }
 
   // @Delete(':id')

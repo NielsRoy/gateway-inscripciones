@@ -6,11 +6,12 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_TEACHER_TOPIC } from 'src/config/services';
 
 @ApiTags('Docente')
 @Controller('teacher')
 export class TeacherController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
 
   @Post()
@@ -29,7 +30,7 @@ export class TeacherController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_TEACHER_TOPIC);
   }
 
   @Get()
@@ -48,7 +49,7 @@ export class TeacherController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_TEACHER_TOPIC);
   }
 
   @Get(':id')
@@ -67,7 +68,7 @@ export class TeacherController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_TEACHER_TOPIC);
   }
 
   @Patch(':id')
@@ -87,8 +88,8 @@ export class TeacherController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_TEACHER_TOPIC);
   }
 
   // @Delete(':id')

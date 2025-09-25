@@ -6,17 +6,18 @@ import { ProcessorService } from 'src/processor.service';
 import { HttpMethod } from 'src/common/interfaces/processor.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import type { Request } from 'express';
+import { KAFKA_REGISTRATION_TOPIC } from 'src/config/services';
 
 @ApiTags('Grupo - Materia')
 @Controller('subject-group')
 export class SubjectGroupController {
-  
+
   constructor(private readonly processorService: ProcessorService) {}
-  
+
   @Post()
   create(
     @Req() req: Request,
-    @Body() createSubjectGroupDto: CreateSubjectGroupDto, 
+    @Body() createSubjectGroupDto: CreateSubjectGroupDto,
     @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
   ) {
     const hash = (req as any).hash;
@@ -30,7 +31,7 @@ export class SubjectGroupController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_REGISTRATION_TOPIC);
   }
 
   @Get()
@@ -49,7 +50,7 @@ export class SubjectGroupController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_REGISTRATION_TOPIC);
   }
 
   @Get(':id')
@@ -68,7 +69,7 @@ export class SubjectGroupController {
       replyTo: 'http://localhost:3000/api/reply',
     };
 
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_REGISTRATION_TOPIC);
   }
 
   @Patch(':id')
@@ -89,8 +90,8 @@ export class SubjectGroupController {
       async,
       replyTo: 'http://localhost:3000/api/reply',
     };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+
+    return this.processorService.handleRequest(payload, async, responseHash, KAFKA_REGISTRATION_TOPIC);
   }
 
   // @Delete(':id')
