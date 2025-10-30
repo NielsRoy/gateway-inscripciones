@@ -7,13 +7,20 @@ import { ProcessorService } from './processor.service';
 @Module({
   imports: [
     ClientsModule.register([
-      { 
+      // { 
+      //   name: PROCESSOR_SERVICE,
+      //   transport: Transport.TCP,
+      //   options: {
+      //     host: envs.processorHost,
+      //     port: envs.processorPort,
+      //   }
+      // },
+      {
         name: PROCESSOR_SERVICE,
-        transport: Transport.TCP,
+        transport: Transport.NATS,
         options: {
-          host: envs.processorHost,
-          port: envs.processorPort,
-        }
+          servers: [`nats://${envs.processorHost}:${envs.processorPort}`],
+        },
       },
       { 
         name: KAFKA_SERVICE,
@@ -27,6 +34,6 @@ import { ProcessorService } from './processor.service';
     ]),
   ],
   providers: [ProcessorService],
-  exports: [ProcessorService],
+  exports: [ProcessorService, ClientsModule],
 })
 export class ProcessorModule {}

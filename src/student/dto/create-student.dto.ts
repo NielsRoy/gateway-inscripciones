@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
 
 export class CreateStudentDto {
 
@@ -53,4 +53,14 @@ export class CreateStudentDto {
   @Min(0)
   @IsOptional()
   cellphone?: number;
+
+  @ApiProperty({
+    description: 'ID de Plan de estudio',
+    nullable: false,
+    required: true,
+    example: 1
+  })
+  @IsNumber()
+  @IsPositive()
+  studyPlanId: number;
 }

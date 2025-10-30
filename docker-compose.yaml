@@ -58,6 +58,12 @@ services:
     volumes:
       - redis:/data
 
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"  # Puerto del cliente
+      - "8222:8222"  # Puerto de monitoreo HTTP
+
 volumes:
   zookeeper-data:
   zookeeper-logs:
