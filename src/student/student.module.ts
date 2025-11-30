@@ -5,12 +5,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { envs } from '../config/env';
 
 @Module({
-  controllers: [StudentController,],
+  controllers: [StudentController],
   imports: [
     ProcessorModule,
     JwtModule.register({
+      global: true,
       secret: envs.JWT_SECRET
     })
   ],
 })
-export class StudentModule {}
+export class StudentModule { }
