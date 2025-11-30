@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
-import { StudentService } from './student.service';
 import { StudentController } from './controllers/student.controller';
-import { GradeController } from './controllers/grade.controller';
-import { ProcessorModule } from 'src/processor.module';
+import { ProcessorModule } from '../processor.module';
+import { JwtModule } from '@nestjs/jwt';
+import { envs } from '../config/env';
 
 @Module({
-  controllers: [StudentController, GradeController,],
-  providers: [StudentService],
-  imports: [ProcessorModule],
+  controllers: [StudentController,],
+  imports: [
+    ProcessorModule,
+    JwtModule.register({
+      secret: envs.JWT_SECRET
+    })
+  ],
 })
 export class StudentModule {}

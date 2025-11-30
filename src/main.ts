@@ -26,8 +26,8 @@ async function bootstrap() {
   const apiDocPath = 'api';
   SwaggerModule.setup(apiDocPath, app, documentFactory);
 
-  await app.listen(envs.port);
-  logger.log(`App running on port: ${envs.port}`);
-  logger.log(`See the api doc on: http://localhost:${envs.port}/${apiDocPath}`);
+  await app.listen(envs.PORT);
+  logger.log(`App running on port: ${envs.PORT}`);
+  logger.log(`See the api doc on: http://localhost:${envs.PORT}/${apiDocPath}`);
 }
 bootstrap();

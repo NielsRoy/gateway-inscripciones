@@ -4,22 +4,20 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
+  JWT_SECRET: string;
   KAFKA_HOST: string;
   KAFKA_PORT: number;
   PROCESSOR_HOST: string;
   PROCESSOR_PORT: number;
-  REDIS_HOST: string;
-  REDIS_PORT: number;
 }
 
 const envsSchema = joi.object({
   PORT: joi.number().required(),
+  JWT_SECRET: joi.string().required(),
   KAFKA_HOST: joi.string().required(),
   KAFKA_PORT: joi.number().required(),
   PROCESSOR_HOST: joi.string().required(),
   PROCESSOR_PORT: joi.number().required(),
-  REDIS_HOST: joi.string().required(),
-  REDIS_PORT: joi.number().required(),
 })
 .unknown(true);
 
@@ -34,11 +32,10 @@ const envVars:EnvVars = value;
 
 
 export const envs = {
-  port: envVars.PORT,
-  kafkaHost: envVars.KAFKA_HOST,
-  kafkaPort: envVars.KAFKA_PORT,
-  processorHost: envVars.PROCESSOR_HOST,
-  processorPort: envVars.PROCESSOR_PORT,
-  redisHost: envVars.REDIS_HOST,
-  redisPort: envVars.REDIS_PORT,
+  PORT: envVars.PORT,
+  JWT_SECRET: envVars.JWT_SECRET,
+  KAFKA_HOST: envVars.KAFKA_HOST,
+  KAFKA_PORT: envVars.KAFKA_PORT,
+  PROCESSOR_HOST: envVars.PROCESSOR_HOST,
+  PROCESSOR_PORT: envVars.PROCESSOR_PORT,
 };

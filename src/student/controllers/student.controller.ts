@@ -1,120 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Req, Query, DefaultValuePipe, ParseBoolPipe, Inject } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Inject, UseGuards } from '@nestjs/common';
 import { CreateStudentDto } from '../dto/create-student.dto';
-import { UpdateStudentDto } from '../dto/update-student.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { ProcessorService } from 'src/processor.service';
-import { HttpMethod } from 'src/common/interfaces/processor.interface';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import type { Request } from 'express';
-import { PROCESSOR_SERVICE } from 'src/config/services';
+import { PROCESSOR_SERVICE } from '../../config/services';
 import { ClientProxy } from '@nestjs/microservices';
+import { LoginStudentDto } from '../dto/login-student.dto';
+import { AuthGuard } from '../guards/auth.guard';
+import { GetAuthStudentId } from '../decorators/get-auth-student-id.decorator';
 
 @ApiTags('Estudiante')
 @Controller('student')
 export class StudentController {
 
   constructor(
-    private readonly processorService: ProcessorService,
     @Inject(PROCESSOR_SERVICE) private readonly processorClient: ClientProxy,
   ) {}
 
   @Post()
   create(
-    @Body() createStudentDto: CreateStudentDto,
+    @Body() dto: CreateStudentDto,
   ) {
-    return this.processorClient.send('register_student',createStudentDto);
+    return this.processorClient.send('register_student', dto);
   }
 
-  // @Post()
-  // create(
-  //   @Req() req: Request,
-  //   @Body() createStudentDto: CreateStudentDto,
-  //   @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
-  // ) {
-  //   const hash = (req as any).hash;
-  //   const responseHash = (req as any).responseHash;
-  //   const payload  = {
-  //     method: HttpMethod.POST,
-  //     entity: 'Student',
-  //     body: createStudentDto,
-  //     hash,
-  //     responseHash,
-  //     replyTo: 'http://localhost:3000/api/reply',
-  //   };
-
-  //   return this.processorService.handleRequest(payload, async, responseHash);
-  // }
-
-  @Get()
-  findAll(
-    @Req() req: Request,
-    @Query() paginationDto: PaginationDto,
+  @Post('login')
+  login(
+    @Body() dto: LoginStudentDto,
   ) {
-    const hash = (req as any).hash;
-    const responseHash = (req as any).responseHash;
-    const { async } = paginationDto;
-    const payload = {
-      method: HttpMethod.GET,
-      entity: 'Student',
-      hash,
-      responseHash,
-      paginationDto,
-      replyTo: 'http://localhost:3000/api/reply',
-    };
-
-    return this.processorService.handleRequest(payload, async, responseHash);
+    return this.processorClient.send('login_student', dto);
   }
 
-  @Get(':id')
-  findOne(
-    @Req() req: Request,
-    @Param('id', ParseIntPipe) id: number,
-    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,
-  ) {
-    const hash = (req as any).hash;
-    const responseHash = (req as any).responseHash;
-    const payload = {
-      method: HttpMethod.GET,
-      entity: 'Student',
-      hash,
-      responseHash,
-      body: { id },
-      replyTo: 'http://localhost:3000/api/reply',
-    };
-
-    return this.processorService.handleRequest(payload, async, responseHash);
+  @UseGuards(AuthGuard)
+  @Get('refresh-auth-token')
+  checkAuthStatus(@GetAuthStudentId() studentId: number) {
+    return this.processorClient.send('check_auth_status', { studentId });
   }
 
-  @Patch(':id')
-  update(
-    @Req() req: Request,
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateStudentDto: UpdateStudentDto,
-    @Query('async', new DefaultValuePipe(true), ParseBoolPipe) async: boolean,  //TODO: Quitar para mayor facilidad
-  ) {
-    const hash = (req as any).hash;
-    const responseHash = (req as any).responseHash;
-    const payload = {
-      method: HttpMethod.PATCH,
-      entity: 'Student',
-      body: { id, ...updateStudentDto },
-      hash,
-      responseHash,
-      replyTo: 'http://localhost:3000/api/reply',
-    };
-    
-    return this.processorService.handleRequest(payload, async, responseHash);
+  @UseGuards(AuthGuard)
+  @Get('subjects-to-enroll')
+  getSubjectsForEnroll(@GetAuthStudentId() studentId: number) {
+    return this.processorClient.send('get_subjects_to_enroll', { studentId });
   }
-
-  @Get(':id/subjects-for-enroll')
-  getSubjectsForEnroll(
-    @Param('id', ParseIntPipe) id: number,
-  ) {
-    return this.processorClient.send('get_subjects_for_enroll', { studentId: id });
-  }
-
-  // @Delete(':id')
-  // remove(@Param('id', ParseIntPipe) id: number) {
-  //   return this.studentService.remove(id);
-  // }
 }

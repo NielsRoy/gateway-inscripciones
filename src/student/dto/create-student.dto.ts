@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Min, MinLength } from "class-validator";
 
 export class CreateStudentDto {
 
@@ -12,6 +12,16 @@ export class CreateStudentDto {
   @IsNumber()
   @Min(0)
   code: number;
+
+  @ApiProperty({
+    description: 'Contraseña',
+    nullable: false,
+    uniqueItems: false,
+    example: 123456,
+  })
+  @IsString()
+  @MinLength(6)
+  password: string;
 
   @ApiProperty({
     description: 'Carnet de identidad',

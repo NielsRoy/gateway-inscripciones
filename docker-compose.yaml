@@ -50,19 +50,23 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
-  redis:
-    container_name: redis
-    image: redis:7
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis:/data
-
   nats:
     image: nats:latest
     ports:
       - "4222:4222"  # Puerto del cliente
       - "8222:8222"  # Puerto de monitoreo HTTP
+
+  db:
+    image: postgres:14.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: dbtopicos
+    container_name: db-topicos
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
 
 volumes:
   zookeeper-data:
