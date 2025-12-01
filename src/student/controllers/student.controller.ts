@@ -13,7 +13,7 @@ export class StudentController {
 
   constructor(
     @Inject(PROCESSOR_SERVICE) private readonly processorClient: ClientProxy,
-  ) {}
+  ) { }
 
   @Post()
   create(
@@ -39,5 +39,11 @@ export class StudentController {
   @Get('subjects-to-enroll')
   getSubjectsForEnroll(@GetAuthStudentId() studentId: number) {
     return this.processorClient.send('get_subjects_to_enroll', { studentId });
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('historic')
+  getStudentHistoric(@GetAuthStudentId() studentId: number) {
+    return this.processorClient.send('get_student_historic', { studentId });
   }
 }
