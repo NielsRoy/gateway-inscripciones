@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 import { EnrollmentDto } from "../dto/enrollment.dto";
@@ -53,20 +53,14 @@ export class EnrollmentController {
     return result;
   }
 
-  @Get('student/:studentId')
+  @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Obtener historial de inscripciones del estudiante' })
   @ApiResponse({ status: 200, description: 'Lista de inscripciones del estudiante' })
   async getStudentEnrollments(
-    @Param('studentId', ParseIntPipe) studentId: number,
-    @GetAuthStudentId('studentId') tokenStudentId: number,
+    @GetAuthStudentId('studentId') studentId: number,
   ) {
-    // Verificar que el estudiante solo pueda ver sus propias inscripciones
-    if (studentId !== tokenStudentId) {
-      throw new Error('No autorizado para ver inscripciones de otro estudiante');
-    }
-
     const result = await firstValueFrom(
       this.processorClient.send('get_student_enrollments', { studentId })
     );

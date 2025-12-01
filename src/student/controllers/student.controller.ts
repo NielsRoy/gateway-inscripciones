@@ -30,7 +30,7 @@ export class StudentController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('refresh-auth-token')
+  @Get('check-auth-status')
   checkAuthStatus(@GetAuthStudentId() studentId: number) {
     return this.processorClient.send('check_auth_status', { studentId });
   }
