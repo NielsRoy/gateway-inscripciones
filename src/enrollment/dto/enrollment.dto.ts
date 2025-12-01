@@ -12,26 +12,6 @@ export class EnrollmentDto {
   online: boolean;
 
   @ApiProperty({
-    description: 'ID del Periodo',
-    nullable: false,
-    example: 1,
-  })
-  @IsNumber()
-  @IsPositive()
-  @Min(1)
-  periodId: number;
-
-  // @ApiProperty({
-  //   description: 'Id del estudiante',
-  //   nullable: false,
-  //   example: 1,
-  // })
-  // @IsNumber()
-  // @IsPositive()
-  // @Min(1)
-  // studentId: number;
-
-  @ApiProperty({
     description: 'Lista de ID de (Grupo - Materias) a inscribir',
     nullable: false,
     example: [1, 2]

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config/env';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { RpcExceptionFilter } from './common/filters/rpc-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const logger = new Logger('Main');
@@ -16,7 +17,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+  app.useGlobalFilters(new RpcExceptionFilter());
 
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('Sistema de inscripciones - API')
     .setDescription('Sistema de inscripciones - Endpoints')

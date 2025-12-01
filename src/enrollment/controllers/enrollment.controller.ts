@@ -67,26 +67,4 @@ export class EnrollmentController {
 
     return result;
   }
-
-  @Get('student/:studentId/period/:periodId')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Obtener inscripción del estudiante en un período específico' })
-  @ApiResponse({ status: 200, description: 'Inscripción del estudiante en el período' })
-  async getStudentEnrollmentByPeriod(
-    @Param('studentId', ParseIntPipe) studentId: number,
-    @Param('periodId', ParseIntPipe) periodId: number,
-    @GetAuthStudentId('studentId') tokenStudentId: number,
-  ) {
-    // Verificar que el estudiante solo pueda ver sus propias inscripciones
-    if (studentId !== tokenStudentId) {
-      throw new Error('No autorizado para ver inscripciones de otro estudiante');
-    }
-
-    const result = await firstValueFrom(
-      this.processorClient.send('get_student_enrollments', { studentId, periodId })
-    );
-
-    return result;
-  }
 }
