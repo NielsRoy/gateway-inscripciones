@@ -1,19 +1,19 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 import { EnrollmentDto } from "../dto/enrollment.dto";
 import { firstValueFrom } from "rxjs";
 import { AuthGuard } from "../../student/guards/auth.guard";
 import { GetAuthStudentId } from "../../student/decorators/get-auth-student-id.decorator";
-import { PROCESSOR_SERVICE } from "../../config/services";
+import { NATS_SERVICE } from "../../config/injection-tokens";
 
 @ApiTags('Inscripción')
 @Controller('enrollment')
 export class EnrollmentController {
 
   constructor(
-    @Inject(PROCESSOR_SERVICE)
-    private readonly processorClient: ClientProxy,
+    @Inject(NATS_SERVICE)
+    private readonly natsClient: ClientProxy,
   ) { }
 
   @Post()
@@ -31,7 +31,7 @@ export class EnrollmentController {
     // dto.studentId = studentId;
 
     const result = await firstValueFrom(
-      this.processorClient.send('create_enrollment_request', { ...dto, studentId })
+      this.natsClient.send('create_enrollment_request', { ...dto, studentId })
     );
 
     return result;
@@ -47,7 +47,7 @@ export class EnrollmentController {
     @Param('id', ParseIntPipe) enrollmentId: number,
   ) {
     const result = await firstValueFrom(
-      this.processorClient.send('get_enrollment_status', { enrollmentId })
+      this.natsClient.send('get_enrollment_status', { enrollmentId })
     );
 
     return result;
@@ -62,7 +62,7 @@ export class EnrollmentController {
     @GetAuthStudentId('studentId') studentId: number,
   ) {
     const result = await firstValueFrom(
-      this.processorClient.send('get_student_enrollments', { studentId })
+      this.natsClient.send('get_student_enrollments', { studentId })
     );
 
     return result;

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ProcessorModule } from '../processor.module';
+import { TransportModule } from '../transport.module';
 import { StudyPlanController } from './controllers/study-plan.controller';
 
 @Module({
   controllers: [StudyPlanController],
-  imports: [ProcessorModule],
+  imports: [TransportModule],
 })
 export class StudyPlanModule { }

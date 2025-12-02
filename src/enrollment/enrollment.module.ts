@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { EnrollmentController } from './controllers/enrollment.controller';
-import { ProcessorModule } from '../processor.module';
+import { TransportModule } from '../transport.module';
 
 @Module({
   controllers: [EnrollmentController],
   imports: [
-    ProcessorModule,
+    TransportModule,
   ]
 })
 export class EnrollmentModule { }

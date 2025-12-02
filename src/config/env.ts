@@ -5,19 +5,17 @@ import * as joi from 'joi';
 interface EnvVars {
   PORT: number;
   JWT_SECRET: string;
-  KAFKA_HOST: string;
-  KAFKA_PORT: number;
-  PROCESSOR_HOST: string;
-  PROCESSOR_PORT: number;
+  
+  NATS_HOST: string;
+  NATS_PORT: number;
 }
 
 const envsSchema = joi.object({
   PORT: joi.number().required(),
   JWT_SECRET: joi.string().required(),
-  KAFKA_HOST: joi.string().required(),
-  KAFKA_PORT: joi.number().required(),
-  PROCESSOR_HOST: joi.string().required(),
-  PROCESSOR_PORT: joi.number().required(),
+  
+  NATS_HOST: joi.string().required(),
+  NATS_PORT: joi.number().required(),
 })
 .unknown(true);
 
@@ -34,8 +32,7 @@ const envVars:EnvVars = value;
 export const envs = {
   PORT: envVars.PORT,
   JWT_SECRET: envVars.JWT_SECRET,
-  KAFKA_HOST: envVars.KAFKA_HOST,
-  KAFKA_PORT: envVars.KAFKA_PORT,
-  PROCESSOR_HOST: envVars.PROCESSOR_HOST,
-  PROCESSOR_PORT: envVars.PROCESSOR_PORT,
+  
+  NATS_HOST: envVars.NATS_HOST,
+  NATS_PORT: envVars.NATS_PORT,
 };

@@ -1,7 +1,7 @@
 import { Controller, Get, Inject, Param, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiTags } from "@nestjs/swagger";
-import { PROCESSOR_SERVICE } from "src/config/services";
+import { NATS_SERVICE } from "../../config/injection-tokens";
 import { AuthGuard } from "../../student/guards/auth.guard";
 
 @ApiTags('Plan de Estudio')
@@ -9,13 +9,13 @@ import { AuthGuard } from "../../student/guards/auth.guard";
 export class StudyPlanController {
 
   constructor(
-    @Inject(PROCESSOR_SERVICE) private readonly processorClient: ClientProxy,
+    @Inject(NATS_SERVICE) private readonly natsClient: ClientProxy,
   ) { }
 
   @UseGuards(AuthGuard)
   @Get(':id')
   getStudyPlan(@Param('id', ParseIntPipe) id: number) {
-    return this.processorClient.send('get_study_plan', { studyPlanId: id });
+    return this.natsClient.send('get_study_plan', { studyPlanId: id });
   }
 
 }
