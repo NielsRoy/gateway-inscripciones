@@ -11,15 +11,6 @@ import { NATS_SERVICE } from './config/injection-tokens';
         transport: Transport.NATS,
         options: {
           servers: [env.NATS_SERVER_URL],
-          authenticator: (env.STATE === 'production') 
-          ? {
-              type: 'jwt',
-              jwt: {
-                jwt: env.NATS_JWT,
-                seed: env.NATS_SEED,
-              },
-            }
-          : undefined
         },
       },
     ]),
