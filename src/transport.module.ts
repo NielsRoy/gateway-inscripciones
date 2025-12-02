@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { envs } from './config/env';
+import { env } from './config/env';
 import { NATS_SERVICE } from './config/injection-tokens';
 
 @Module({
@@ -10,7 +10,16 @@ import { NATS_SERVICE } from './config/injection-tokens';
         name: NATS_SERVICE,
         transport: Transport.NATS,
         options: {
-          servers: [`nats://${envs.NATS_HOST}:${envs.NATS_PORT}`],
+          servers: [env.NATS_SERVER_URL],
+          authenticator: (env.STATE === 'production') 
+          ? {
+              type: 'jwt',
+              jwt: {
+                jwt: env.NATS_JWT,
+                seed: env.NATS_SEED,
+              },
+            }
+          : undefined
         },
       },
     ]),

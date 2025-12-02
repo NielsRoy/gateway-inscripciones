@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { envs } from './config/env';
+import { env } from './config/env';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { RpcExceptionFilter } from './common/filters/rpc-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -29,8 +29,8 @@ async function bootstrap() {
   const apiDocPath = 'api';
   SwaggerModule.setup(apiDocPath, app, documentFactory);
 
-  await app.listen(envs.PORT);
-  logger.log(`App running on port: ${envs.PORT}`);
-  logger.log(`See the api doc on: http://localhost:${envs.PORT}/${apiDocPath}`);
+  await app.listen(env.PORT);
+  logger.log(`App running in ${env.STATE} state`);
+  logger.log(`See the api doc on: http://localhost:${env.PORT}/${apiDocPath}`);
 }
 bootstrap();

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { StudentController } from './controllers/student.controller';
 import { TransportModule } from '../transport.module';
 import { JwtModule } from '@nestjs/jwt';
-import { envs } from '../config/env';
+import { env } from '../config/env';
 
 @Module({
   controllers: [StudentController],
@@ -10,7 +10,7 @@ import { envs } from '../config/env';
     TransportModule,
     JwtModule.register({
       global: true,
-      secret: envs.JWT_SECRET
+      secret: env.JWT_SECRET
     })
   ],
 })

@@ -3,19 +3,40 @@ import 'dotenv/config';
 import * as joi from 'joi';
 
 interface EnvVars {
+  STATE: 'production' | 'development';
+
   PORT: number;
   JWT_SECRET: string;
   
   NATS_HOST: string;
   NATS_PORT: number;
+  NATS_JWT: string;
+  NATS_SEED: string;
 }
 
 const envsSchema = joi.object({
+  STATE: joi.allow('production','development').required(),
   PORT: joi.number().required(),
   JWT_SECRET: joi.string().required(),
   
   NATS_HOST: joi.string().required(),
-  NATS_PORT: joi.number().required(),
+
+  NATS_PORT: joi.number().when('STATE', {
+    is: 'development',
+    then: joi.required(),
+    otherwise: joi.optional(),    
+  }),
+  
+  NATS_JWT: joi.string().when('STATE', {
+    is: 'production',
+    then: joi.required(),
+    otherwise: joi.optional().default(''),
+  }),
+  NATS_SEED: joi.string().when('STATE', {
+    is: 'production',
+    then: joi.required(),
+    otherwise: joi.optional().default(''),
+  }),
 })
 .unknown(true);
 
@@ -28,11 +49,14 @@ if ( error ) {
 
 const envVars:EnvVars = value;
 
-
-export const envs = {
+export const env = {
+  STATE: envVars.STATE,
   PORT: envVars.PORT,
   JWT_SECRET: envVars.JWT_SECRET,
   
-  NATS_HOST: envVars.NATS_HOST,
-  NATS_PORT: envVars.NATS_PORT,
+  NATS_SERVER_URL: (envVars.STATE === 'development') 
+    ? `nats://${envVars.NATS_HOST}:${envVars.NATS_PORT}`
+    : `tls://${envVars.NATS_HOST}`,
+  NATS_JWT: envVars.NATS_JWT,
+  NATS_SEED: envVars.NATS_SEED,
 };
