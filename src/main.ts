@@ -29,7 +29,7 @@ async function bootstrap() {
   const apiDocPath = 'api';
   SwaggerModule.setup(apiDocPath, app, documentFactory);
 
-  await app.listen(env.PORT);
+  await app.listen(env.PORT, '0.0.0.0');
   logger.log(`App running in ${env.STATE} state`);
   logger.log(`See the api doc on: http://localhost:${env.PORT}/${apiDocPath}`);
 }
